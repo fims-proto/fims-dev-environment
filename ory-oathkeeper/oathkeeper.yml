@@ -1,0 +1,92 @@
+version: v0.38.15-beta.1-alpine
+
+log:
+  level: info
+  format: json
+
+serve:
+  proxy:
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://127.0.0.1:5001 # front-ui
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+      allow_credentials: true
+      debug: true
+
+access_rules:
+  matching_strategy: regexp
+  repositories:
+    - file:///etc/config/oathkeeper/access-rules.yml
+
+authenticators:
+  anonymous:
+    enabled: true
+    config:
+      subject: guest
+
+  cookie_session:
+    enabled: true
+    config:
+      check_session_url: http://dummy
+
+  jwt:
+    enabled: true
+    config:
+      jwks_urls:
+        - file:///etc/config/oathkeeper/id_token.jwks.json
+      scope_strategy: none
+      trusted_issuers:
+        - http://127.0.0.1:4455/
+
+  noop:
+    enabled: true
+
+authorizers:
+  allow:
+    enabled: true
+
+mutators:
+  noop:
+    enabled: true
+
+  header:
+    enabled: true
+    config:
+      headers:
+        X-User: "{{ print .Subject }}"
+
+  id_token:
+    enabled: true
+    config:
+      issuer_url: http://127.0.0.1:4455/
+      jwks_url: file:///etc/config/oathkeeper/id_token.jwks.json
+      claims: |
+        {
+          "session": {{ .Extra | toJson }}
+        }
+
+errors:
+  fallback:
+    - json
+
+  handlers:
+    redirect:
+      enabled: true
+      config:
+        to: http://dummy
+        when:
+          - request:
+              header:
+                accept:
+                  - text/*
