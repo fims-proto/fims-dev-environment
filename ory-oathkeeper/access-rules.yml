@@ -3,7 +3,7 @@
     preserve_host: true
     url: "http://host.docker.internal:5001"
   match:
-    url: "http://<.+>:4455/<(?!ui|authentication|profile|fims|kratos).*>"
+    url: "http://127.0.0.1:4455/<(?!ui|authentication|profile|fims|kratos).*>"
     methods:
       - GET
   authenticators:
@@ -18,7 +18,7 @@
     preserve_host: true
     url: "http://host.docker.internal:5001"
   match:
-    url: "http://<.+>:4455/authentication/<.*>"
+    url: "http://127.0.0.1:4455/authentication/<.*>"
     methods:
       - GET
   authenticators:
@@ -33,7 +33,7 @@
     preserve_host: true
     url: "http://host.docker.internal:5001"
   match:
-    url: "http://<.+>:4455/ui<.*>"
+    url: "http://127.0.0.1:4455/ui<.*>"
     methods:
       - GET
   authenticators:
@@ -52,7 +52,7 @@
   errors:
     - handler: redirect
       config:
-        to: 'http://<.+>:4455/authentication/login'
+        to: 'http://127.0.0.1:4455/authentication/login'
         return_to_query_param: 'return_to'
         when:
           - request:
@@ -66,7 +66,7 @@
     url: "http://host.docker.internal:5002"
     strip_path: /fims
   match:
-    url: "http://<.+>:4455/fims/<.*>"
+    url: "http://127.0.0.1:4455/fims/<.*>"
     methods:
       - GET
       - POST
@@ -97,7 +97,7 @@
     url: "http://kratos:4433"
     strip_path: /kratos/public
   match:
-    url: "http://<.+>:4455/kratos/public/<.*>"
+    url: "http://127.0.0.1:4455/kratos/public/<.*>"
     methods:
       - GET
       - POST
