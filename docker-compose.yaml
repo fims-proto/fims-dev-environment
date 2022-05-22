@@ -28,7 +28,7 @@ services:
   kratos-migrate:
     # profiles:
     #   - "kratos"
-    image: oryd/kratos:v0.8.0-alpha.3
+    image: oryd/kratos:v0.9.0-alpha.3
     restart: "no"
     environment:
       - DSN=postgres://93fe5029-1886-4b63-94ca-35c503a52eff:hePrAqafu&5Ep49V8th9@postgres:5432/postgres?sslmode=disable&max_conns=20&max_idle_conns=4&TimeZone=UTC
@@ -44,7 +44,7 @@ services:
     #   - "kratos"
     depends_on:
       - kratos-migrate
-    image: oryd/kratos:v0.8.0-alpha.3
+    image: oryd/kratos:v0.9.0-alpha.3
     restart: "unless-stopped"
     environment:
       - DSN=postgres://93fe5029-1886-4b63-94ca-35c503a52eff:hePrAqafu&5Ep49V8th9@postgres:5432/postgres?sslmode=disable&max_conns=20&max_idle_conns=4&TimeZone=UTC

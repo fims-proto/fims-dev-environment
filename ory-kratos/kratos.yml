@@ -1,7 +1,9 @@
-version: v0.8.0-alpha.3
+version: v0.9.0-alpha.3
 
 identity:
-  default_schema_url: file:///etc/config/kratos/identity.schema.json
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json
 
 dsn: memory
 
