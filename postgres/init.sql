@@ -15,7 +15,7 @@ REVOKE ALL ON SCHEMA "93fe5029-1886-4b63-94ca-35c503a52eff" FROM public;
 
 
 -- create tenants table
-CREATE TABLE "fims"."a_tenants" (
+CREATE TABLE "fims"."tenants" (
     "id" uuid,
     "subdomain" text,
     "dsn" text,
@@ -24,7 +24,7 @@ CREATE TABLE "fims"."a_tenants" (
     PRIMARY KEY ("id")
 );
 -- init data for local tenant
-INSERT INTO "fims"."a_tenants" (
+INSERT INTO "fims"."tenants" (
     "id",
     "subdomain",
     "dsn",
@@ -39,4 +39,4 @@ INSERT INTO "fims"."a_tenants" (
 );
 
 -- change owner
-ALTER TABLE "fims"."a_tenants" OWNER TO "fims";
+ALTER TABLE "fims"."tenants" OWNER TO "fims";
