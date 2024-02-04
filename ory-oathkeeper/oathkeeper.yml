@@ -1,7 +1,6 @@
-version: v0.40.0
+version: v0.40.6
 
 log:
-  level: info
   format: json
 
 serve:
@@ -27,18 +26,16 @@ serve:
 access_rules:
   matching_strategy: regexp
   repositories:
-    - file:///etc/config/oathkeeper/access-rules.yml
+    - file:///etc/config/oathkeeper/access-rules.json
 
 authenticators:
   anonymous:
     enabled: true
-    config:
-      subject: guest
 
   cookie_session:
     enabled: true
     config:
-      check_session_url: http://dummy
+      check_session_url: http://dummy # will be overwritten in access rules
 
   jwt:
     enabled: true

@@ -1,4 +1,4 @@
-version: v0.11.0
+version: v1.0.0
 
 identity:
   schemas:
@@ -15,8 +15,6 @@ serve:
 
 selfservice:
   default_browser_return_url: http://127.0.0.1:4455
-  # whitelisted_return_urls:
-  #   - http://127.0.0.1:5000
 
   methods:
     link:
@@ -43,14 +41,6 @@ log:
 secrets:
   cookie:
     - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
-
-hashers:
-  argon2:
-    parallelism: 1
-    memory: 128MB
-    iterations: 2
-    salt_length: 16
-    key_length: 16
 
 courier:
   smtp:

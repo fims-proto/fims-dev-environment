@@ -11,6 +11,8 @@ services:
       - ./postgres:/docker-entrypoint-initdb.d/
       - ./postgres/data:/var/lib/postgresql/data
     environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test
     ports:
       - 5432:5432
@@ -31,7 +33,7 @@ services:
     image: oryd/kratos:v1.0.0
     restart: "no"
     environment:
-      - DSN=postgres://93fe5029-1886-4b63-94ca-35c503a52eff:hePrAqafu&5Ep49V8th9@postgres:5432/postgres?sslmode=disable&max_conns=20&max_idle_conns=4&TimeZone=UTC
+      - DSN=postgres://fims-db:NFLApODULateMyoKERvaGalaQUeYeBRIdwOndiVeRseYeTeSoM@postgres:5432/postgres?sslmode=disable&max_conns=20&max_idle_conns=4&TimeZone=UTC
     volumes:
       - type: bind
         source: ./ory-kratos
@@ -47,7 +49,7 @@ services:
     image: oryd/kratos:v1.0.0
     restart: "unless-stopped"
     environment:
-      - DSN=postgres://93fe5029-1886-4b63-94ca-35c503a52eff:hePrAqafu&5Ep49V8th9@postgres:5432/postgres?sslmode=disable&max_conns=20&max_idle_conns=4&TimeZone=UTC
+      - DSN=postgres://fims-db:NFLApODULateMyoKERvaGalaQUeYeBRIdwOndiVeRseYeTeSoM@postgres:5432/postgres?sslmode=disable&max_conns=20&max_idle_conns=4&TimeZone=UTC
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
     volumes:
       - type: bind
