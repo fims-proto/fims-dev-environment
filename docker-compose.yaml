@@ -1,11 +1,10 @@
-version: "3"
-
+---
 services:
   # postgresql database
   postgres:
     # profiles:
     #   - "db"
-    image: postgres:13
+    image: postgres:15
     restart: "no"
     volumes:
       - ./postgres:/docker-entrypoint-initdb.d/
@@ -16,15 +15,6 @@ services:
       POSTGRES_PASSWORD: test
     ports:
       - 5432:5432
-
-  # database admin
-  adminer:
-    # profiles:
-    #   - "db"
-    image: adminer:latest
-    restart: "no"
-    ports:
-      - 8080:8080
 
   # kratos migration
   kratos-migrate:
