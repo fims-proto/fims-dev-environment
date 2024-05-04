@@ -2,8 +2,6 @@
 services:
   # postgresql database
   postgres:
-    # profiles:
-    #   - "db"
     image: postgres:15
     restart: "no"
     volumes:
@@ -18,8 +16,6 @@ services:
 
   # kratos migration
   kratos-migrate:
-    # profiles:
-    #   - "kratos"
     image: oryd/kratos:v1.1.0
     restart: "no"
     environment:
@@ -32,8 +28,6 @@ services:
 
   # kratos, our IdP
   kratos:
-    # profiles:
-    #   - "kratos"
     depends_on:
       - kratos-migrate
     image: oryd/kratos:v1.1.0
@@ -50,8 +44,6 @@ services:
 
   # oathkeeper, our gateway
   oathkeeper:
-    # profiles:
-    #   - "oathkeeper"
     image: oryd/oathkeeper:v0.40.7
     restart: "no"
     command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
