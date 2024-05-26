@@ -28,7 +28,7 @@ selfservice:
     recovery:
       enabled: true
     settings:
-      ui_url: http://127.0.0.1:4455/ui/profile/settings
+      ui_url: http://127.0.0.1:4455/authentication/register
     logout:
       after:
         default_browser_return_url: http://127.0.0.1:4455/authentication/logout
