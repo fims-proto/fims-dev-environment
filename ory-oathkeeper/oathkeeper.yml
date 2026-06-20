@@ -8,7 +8,11 @@ serve:
     cors:
       enabled: true
       allowed_origins:
-        - http://host.docker.internal:5001 # front-ui
+        - http://127.0.0.1:5001
+        - http://localhost:5001
+        - http://127.0.0.1:4455
+        - http://localhost:4455
+        - http://host.docker.internal:5001
       allowed_methods:
         - POST
         - GET

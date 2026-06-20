@@ -3,7 +3,7 @@
         "id": "ory:fims:entry-ui",
         "upstream": {
             "preserve_host": true,
-            "url": "http://host.docker.internal:5001"
+            "url": "http://fims-ui:5001"
         },
         "match": {
             "url": "http://127.0.0.1:4455/<(?!ui|authentication|profile|fims|kratos).*>",
@@ -29,7 +29,7 @@
         "id": "ory:fims:authentication-ui",
         "upstream": {
             "preserve_host": true,
-            "url": "http://host.docker.internal:5001"
+            "url": "http://fims-ui:5001"
         },
         "match": {
             "url": "http://127.0.0.1:4455/authentication/<.*>",
@@ -55,7 +55,7 @@
         "id": "ory:fims:secured-ui",
         "upstream": {
             "preserve_host": true,
-            "url": "http://host.docker.internal:5001"
+            "url": "http://fims-ui:5001"
         },
         "match": {
             "url": "http://127.0.0.1:4455/ui<.*>",
@@ -110,7 +110,7 @@
         "id": "ory:fims:ms",
         "upstream": {
             "preserve_host": true,
-            "url": "http://host.docker.internal:5002",
+            "url": "http://fims-ms:5002",
             "strip_path": "/fims"
         },
         "match": {

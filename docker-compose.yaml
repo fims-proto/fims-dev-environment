@@ -43,6 +43,10 @@ services:
       - type: bind
         source: ./ory-kratos
         target: /etc/config/kratos
+      - type: bind
+        source: ./scripts
+        target: /scripts
+        read_only: true
     ports:
       - 4434:4434
     extra_hosts:
@@ -54,6 +58,15 @@ services:
   oathkeeper:
     image: oryd/oathkeeper:v0.40.7
     restart: "no"
+    depends_on:
+      kratos:
+        condition: service_started
+      fims-ms:
+        condition: service_started
+      fims-ui:
+        condition: service_started
+      fims-bootstrap:
+        condition: service_completed_successfully
     command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
     environment:
       - LOG_LEVEL=debug
@@ -67,8 +80,78 @@ services:
         - "host.docker.internal:host-gateway"
     networks:
       - default
+
+  # fims backend service
+  fims-ms:
+    build:
+      context: ../fims-proto-ms
+      dockerfile: Dockerfile.dev
+    restart: "unless-stopped"
+    depends_on:
+      - postgres
+    environment:
+      - PROFILE=dev
+      - PORT=5002
+      - DSN=host=postgres port=5432 user=fims-db password=NFLApODULateMyoKERvaGalaQUeYeBRIdwOndiVeRseYeTeSoM dbname=postgres sslmode=disable TimeZone=UTC
+    volumes:
+      - ../fims-proto-ms:/app
+      - fims_ms_gomod:/go/pkg/mod
+      - fims_ms_gocache:/root/.cache/go-build
+    working_dir: /app
+    command: go run cmd/main.go
+    ports:
+      - 5002:5002
+    networks:
+      - default
+
+  # one-shot backend migrations for clean-start bootstrap
+  fims-bootstrap:
+    image: curlimages/curl:8.12.1
+    restart: "no"
+    depends_on:
+      fims-ms:
+        condition: service_started
+    command: >-
+      sh -ec '
+      for i in $(seq 1 60); do
+        curl -fsS http://fims-ms:5002/health/ping >/dev/null && break;
+        sleep 1;
+      done;
+      curl -fsS http://fims-ms:5002/health/ping >/dev/null;
+      curl -fsS -X POST http://fims-ms:5002/internal/sobs/migrate >/dev/null;
+      curl -fsS -X POST http://fims-ms:5002/internal/numbering/migrate >/dev/null;
+      curl -fsS -X POST http://fims-ms:5002/internal/general-ledgers/migrate >/dev/null;
+      curl -fsS -X POST http://fims-ms:5002/internal/users/migrate >/dev/null;
+      curl -fsS -X POST http://fims-ms:5002/internal/dimensions/migrate >/dev/null;
+      curl -fsS -X POST http://fims-ms:5002/internal/reports/migrate >/dev/null;
+      '
+    networks:
+      - default
+
+  # fims frontend service
+  fims-ui:
+    build:
+      context: ../fims-proto-ui
+      dockerfile: Dockerfile.dev
+    restart: "unless-stopped"
+    depends_on:
+      - fims-ms
+    volumes:
+      - ../fims-proto-ui:/app
+      - fims_ui_node_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "test -d node_modules || npm ci; npm run dev -- --host 0.0.0.0 --port 5001"
+    ports:
+      - 5001:5001
+    networks:
+      - default
       
 networks:
   default:
     driver: bridge
     enable_ipv6: true
+
+volumes:
+  fims_ms_gomod:
+  fims_ms_gocache:
+  fims_ui_node_modules:
